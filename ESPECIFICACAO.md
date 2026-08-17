@@ -146,6 +146,32 @@ app/api/transcribe/route.js  POST {media_type, data(base64)} -> {text}
 | `Liberado na 12/08/2026` viraria Na=2026 | guarda de data em `findValue` |
 | pH da urina | skip de seção de urina |
 | `Ureia 52 mg/dL VR: 10 a 50` pegaria 10 | corte em `REF_CUT` antes do matching |
+| `TIROXINA LIVRE (T4L),SANGUE` viraria T4L=4 | rejeitar número precedido de letra |
+| `Contagem absoluta de reticulócitos: 9,14 mil` viraria Ret 9,14% | IGNORE + Ret pega o `RESULTADO: 2,3 %` |
+| `Volume corpuscular médio (VCM R)` contaminaria VCM | IGNORE "vcm r" |
+| Faixa de referência quebrada (`1 a 14 anos Homens: 186 388 mg/dL`) engolida como valor | `REF_WRAP` rejeita; linha-de-valor exige unidade após o número (`UNIT_AFTER`) |
+| Diferencial no singular (`Linfócito: 1,32 39,4 %`) | padrões com plural opcional; % preferido |
+| `Observação Plaquetas:` viraria pendência falsa | `ADMIN_SKIP` inclui "observac" |
+
+### Layout hospitalar ICr/SIGH (validado com laudos reais)
+
+1. **Nome sem rótulo**: `0014163072H NOME EM CAPS` na 2ª linha → fallback
+   `ID_NAME_LINE` (registro com dígitos + nome todo em CAPS, ≥2 palavras,
+   blacklist de termos institucionais).
+2. **Nome do exame e valor em linhas separadas**: `CREATININA (SORO)` →
+   `RESULTADO: 0,16 mg/dL` ou `82 mg/dL` (às vezes com `Método:` e até
+   quebra de página no meio). Mecanismo: cabeçalho sem dígitos que casa com
+   EXATAMENTE UM analito vira pendência {analito, ttl≈6}; linhas
+   administrativas NÃO limpam a pendência; a linha-de-valor deve começar com
+   número/RESULTADO (qualificador `<`/`>` aceito e preservado), ter unidade
+   imediatamente após o número (mg, mEq, μ, K/, %, ...) ou ser só-número,
+   nunca casar `REF_WRAP`, e ter ≤6 dígitos inteiros (anti-protocolo).
+   Captura normal do MESMO analito cancela a pendência.
+3. **Datas por bloco**: um PDF concatena exames de VÁRIAS datas. `Coletado
+   em` (com hora) tem prioridade; `Liberado/Recebido em` (só data) é
+   fallback POR BLOCO — cada exame herda o marcador mais recente no texto.
+   Aviso obrigatório quando liberação substituiu coleta.
+4. **Plaquetas em K/μL** (= mil): `RESULTADO: 93 K/μL` → `Plaq 93mil`.
 
 ## 7. UX (3 passos numa página)
 

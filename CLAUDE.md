@@ -54,17 +54,36 @@ paciente → `formatRotina()` ou `formatMensalao()`.
   (`\x00`) após cada match. Ex.: SatTransf antes de Transf; TIBC antes de
   Ferro; VLDL antes de LDL; CaI antes de Ca.
 - `IGNORE_PATTERNS` mascara falsos amigos ANTES de tudo: HbA1c×Hb, HCM/CHCM,
-  CA-125×Ca, bastonetes, RDW, VPM.
+  CA-125×Ca, bastonetes, RDW, VPM, "contagem absoluta de reticulócitos",
+  IRF, "VCM R" (reticulocitário), "hemoglobina do paciente".
 - Códigos curtos (`near: true`) aceitam líderes de pontos (`pH .... 7,32`)
   mas nunca letras no caminho até o valor (evita "na coleta" → Na).
-- `findValue` rejeita números colados a `/` ou `:` (datas/horas) e corta a
-  linha em marcadores de valor de referência (`REF_CUT`).
+- `findValue` rejeita números colados a `/` ou `:` (datas/horas), números
+  precedidos de letra (o "4" de "(T4L)") e corta a linha em marcadores de
+  valor de referência (`REF_CUT`).
 - Seções de urina (`URINE_SECTION`) são puladas até um cabeçalho de sangue
   (`BLOOD_SECTION`) — protege o pH sérico.
-- Números pt-BR: `4.960` = milhar; `7,35` e `7.35` = decimal. Saída sempre
-  com vírgula.
-- Conversões: Plaq sempre em `mil` (bruto>10000 ÷1000); Leuco em `mil` na
-  ROTINA e absoluto no MENSALÃO.
+- Números pt-BR: `4.960` = milhar; `7,35`, `7.35` e `13.0` = decimal. Saída
+  sempre com vírgula. Qualificadores `<`/`>` preservados (`Ca >13,0`).
+- Conversões: Plaq sempre em `mil` (bruto>10000 ÷1000; unidade K/μL já é
+  mil); Leuco em `mil` na ROTINA e absoluto no MENSALÃO.
+
+### Layout hospitalar ICr/SIGH (validado com laudos reais)
+
+- Nome SEM rótulo: `0014163072H NOME EM CAPS` → fallback `ID_NAME_LINE`.
+- Nome do exame numa linha, valor em OUTRA (`CREATININA (SORO)` →
+  `RESULTADO: 0,16` ou `82 mg/dL`, às vezes após quebra de página) →
+  mecanismo `pending` {analito, ttl}. Linhas administrativas (`ADMIN_SKIP`)
+  NÃO limpam a pendência (o valor pode vir após o rodapé); faixas de
+  referência quebradas (`REF_WRAP`: anos/homens/mulheres...) são rejeitadas
+  como linha-de-valor e não consomem TTL; linha-de-valor exige unidade logo
+  após o número (`UNIT_AFTER`) ou linha só-número.
+- Datas POR BLOCO: um PDF traz exames de VÁRIAS datas; `Coletado em`
+  (prioridade, com hora) e `Liberado/Recebido em` (fallback, só data)
+  atualizam o marcador corrente — cada exame herda o mais recente
+  (`currentDTNow()`); aviso quando a data de liberação foi usada.
+- Diferencial no singular (`Linfócito:`, `Segmentado neutrófilo:`) com
+  absoluto + % na mesma linha → analitos `percent: true` preferem o %.
 
 ## Limitação conhecida
 
@@ -74,8 +93,6 @@ Ureia pré/pós-diálise **no mesmo horário**: dedup mantém só o primeiro val
 
 ## Pendência atual
 
-Publicar no GitHub em repositório existente do usuário. Estado: commit local
-pronto; máquina sem `gh`, sem Homebrew, sem SSH keys, sem credenciais no
-keychain. Falta o usuário fornecer a URL do repo e escolher autenticação
-(device-flow via download do gh, ou PAT rodando o push manualmente).
-Confirmar antes: mesclar histórico existente × substituir conteúdo.
+Publicar em https://github.com/dancabrera22/Dani (repo existe, público,
+VAZIO — push direto). Máquina sem `gh`/Homebrew/SSH/credenciais; falta só a
+autenticação (device-flow via download do gh, ou PAT com push manual).
