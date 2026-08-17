@@ -91,8 +91,14 @@ Ureia pré/pós-diálise **no mesmo horário**: dedup mantém só o primeiro val
 (horários distintos funcionam). Se for corrigir, o dedup está em
 `parseReport`/`mergeResults` (chave `id|sortKey`).
 
-## Pendência atual
+## Publicação
 
-Publicar em https://github.com/dancabrera22/Dani (repo existe, público,
-VAZIO — push direto). Máquina sem `gh`/Homebrew/SSH/credenciais; falta só a
-autenticação (device-flow via download do gh, ou PAT com push manual).
+- **GitHub**: https://github.com/dancabrera22/Dani (branch `main`).
+  `gh` instalado em `~/bin/gh`, autenticado como dancabrera22; push via
+  `git push` funciona (credential helper configurado).
+- **Vercel**: https://transcritor-exames.vercel.app (projeto
+  `transcritor-exames`, conta dancabrera22/iris-dicom). Deploy manual:
+  `npx vercel deploy --prod --yes`. **Sem** `ANTHROPIC_API_KEY` no ambiente
+  Vercel, de propósito: o site público opera só no modo offline (texto/PDF
+  com camada de texto); OCR de imagem fica restrito ao uso local. Não
+  configurar a chave lá sem decisão explícita da usuária.
