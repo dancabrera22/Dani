@@ -1,17 +1,36 @@
+/* Paleta inspirada em sistemas hospitalares institucionais:
+   teal (abas/ações), lavanda (seções), azul-bebê (células de dados),
+   verde (status positivo). */
+
 :root {
-  --bg: #f6f7f9;
+  --bg: #f3f1f8; /* lavanda acinzentado */
   --card: #ffffff;
-  --ink: #1a2332;
-  --muted: #5c6b80;
-  --line: #dde3ea;
-  --accent: #0f6b5c;
-  --accent-ink: #ffffff;
+  --ink: #22364a;
+  --muted: #5f6d7e;
+  --line: #c9d3dd;
+
+  --teal: #2e8b84; /* aba ativa / ações */
+  --teal-dark: #1f6f6a;
+  --teal-soft: #d3e9e6;
+
+  --lav: #e4d9f2; /* faixas de seção */
+  --lav-line: #c9b8e4;
+  --lav-ink: #6a4fa0;
+
+  --blue-cell: #dceef9; /* azul bebê pastel — área dos exames */
+  --blue-line: #b7d3e8;
+
+  --green: #17803c;
+  --green-bg: #e7f4ea;
+
   --warn-bg: #fdf3e3;
   --warn-ink: #8a5a00;
   --err-bg: #fdeaea;
   --err-ink: #a02020;
-  --ok-bg: #e8f5f0;
-  --ok-ink: #0f6b5c;
+  --ok-bg: var(--green-bg);
+  --ok-ink: var(--green);
+  --accent: var(--teal);
+  --accent-ink: #ffffff;
   --mono: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
 }
 
@@ -23,52 +42,69 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 15px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font: 14.5px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .wrap {
   max-width: 980px;
   margin: 0 auto;
-  padding: 24px 20px 80px;
+  padding: 0 20px 80px;
 }
 
+/* cabeçalho: gradiente teal → branco → lavanda */
+header.app {
+  margin: 0 -20px 20px;
+  padding: 18px 24px 14px;
+  background: linear-gradient(90deg, #cfe7e4 0%, #ffffff 45%, #ded0ef 100%);
+  border-bottom: 1px solid var(--lav-line);
+}
 header.app h1 {
-  font-size: 22px;
+  font-size: 21px;
   margin: 0 0 2px;
+  color: var(--teal-dark);
+  letter-spacing: 0.01em;
 }
 header.app p {
-  margin: 0 0 20px;
+  margin: 0;
   color: var(--muted);
-  font-size: 13.5px;
+  font-size: 13px;
 }
 
 .card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 18px;
+  border-radius: 6px;
+  padding: 16px;
   margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(60, 60, 90, 0.05);
 }
+
+/* faixa de seção lavanda (estilo "Menu") */
 .card h2 {
-  font-size: 14px;
+  font-size: 12.5px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  margin: 0 0 12px;
+  letter-spacing: 0.07em;
+  color: var(--lav-ink);
+  background: var(--lav);
+  border-left: 4px solid var(--lav-ink);
+  border-radius: 3px;
+  padding: 6px 10px;
+  margin: 0 0 14px;
 }
 
 textarea.paste {
   width: 100%;
   min-height: 140px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 5px;
   padding: 10px 12px;
   font-family: var(--mono);
   font-size: 12.5px;
   resize: vertical;
+  background: #fbfdff;
 }
 textarea.paste:focus {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--teal);
   border-color: transparent;
 }
 
@@ -84,17 +120,22 @@ button {
   border: 1px solid var(--line);
   background: var(--card);
   color: var(--ink);
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 14px;
+  border-radius: 5px;
+  padding: 7px 14px;
+  font-size: 13.5px;
   cursor: pointer;
 }
 button:hover {
-  border-color: var(--accent);
+  border-color: var(--teal);
+  color: var(--teal-dark);
 }
 button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--teal);
+  border-color: var(--teal-dark);
+  color: var(--accent-ink);
+}
+button.primary:hover {
+  background: var(--teal-dark);
   color: var(--accent-ink);
 }
 button.primary:disabled,
@@ -103,8 +144,8 @@ button:disabled {
   cursor: not-allowed;
 }
 button.small {
-  font-size: 12.5px;
-  padding: 5px 10px;
+  font-size: 12px;
+  padding: 4px 10px;
 }
 button.danger {
   color: var(--err-ink);
@@ -113,49 +154,62 @@ button.danger {
 .filelabel {
   display: inline-block;
   border: 1px dashed var(--line);
-  border-radius: 8px;
-  padding: 8px 14px;
+  border-radius: 5px;
+  padding: 7px 14px;
   cursor: pointer;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13.5px;
+  background: #fbfdff;
 }
 .filelabel:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--teal);
+  color: var(--teal-dark);
 }
 .filelabel input {
   display: none;
 }
 
+/* lista de fontes: linhas de tabela com zebra azul-bebê */
 ul.sources {
   list-style: none;
   padding: 0;
   margin: 12px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  overflow: hidden;
 }
 ul.sources li {
   display: flex;
   gap: 10px;
   align-items: center;
-  border: 1px solid var(--line);
-  border-radius: 8px;
   padding: 8px 12px;
-  margin-bottom: 6px;
-  font-size: 13.5px;
+  font-size: 13px;
   flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
 }
+ul.sources li:nth-child(even) {
+  background: #eef6fc;
+}
+ul.sources li:last-child {
+  border-bottom: none;
+}
+
 .chip {
-  border-radius: 999px;
-  padding: 2px 10px;
-  font-size: 12px;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 11.5px;
   background: var(--bg);
   border: 1px solid var(--line);
   color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 .chip.name {
-  background: var(--ok-bg);
-  color: var(--ok-ink);
+  background: var(--green-bg);
+  color: var(--green);
   border-color: transparent;
-  font-weight: 600;
+  font-weight: 700;
 }
 .chip.none {
   background: var(--warn-bg);
@@ -164,68 +218,79 @@ ul.sources li {
 }
 .count {
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 12px;
 }
 .spacer {
   flex: 1;
 }
 
 .banner {
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  font-size: 14.5px;
+  border-radius: 5px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 14px;
 }
 .banner.confirm {
-  background: var(--ok-bg);
-  color: var(--ok-ink);
+  background: var(--green-bg);
+  color: var(--green);
   display: flex;
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
+  border: 1px solid #bfe0c8;
 }
 .banner.confirm strong {
-  font-size: 16px;
+  font-size: 15.5px;
+  font-weight: 700;
 }
 .banner.warn {
   background: var(--warn-bg);
   color: var(--warn-ink);
+  border: 1px solid #ecd9b0;
 }
 .banner.error {
   background: var(--err-bg);
   color: var(--err-ink);
+  border: 1px solid #eec3c3;
 }
 .banner input[type='text'] {
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 7px 10px;
+  border-radius: 5px;
+  padding: 6px 10px;
   font-size: 14px;
   min-width: 260px;
 }
 
+/* abas estilo intranet: ativa em teal */
 .toggle {
   display: inline-flex;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 5px;
   overflow: hidden;
+  background: #eceff3;
 }
 .toggle button {
   border: none;
   border-radius: 0;
-  padding: 8px 16px;
+  padding: 7px 16px;
+  background: transparent;
+  font-weight: 600;
+  color: var(--muted);
 }
 .toggle button.active {
-  background: var(--accent);
+  background: var(--teal);
   color: var(--accent-ink);
 }
 
+/* área dos exames: azul bebê pastel */
 pre.output {
-  background: #10141a;
-  color: #d8e2ee;
-  border-radius: 8px;
+  background: var(--blue-cell);
+  color: var(--ink);
+  border: 1px solid var(--blue-line);
+  border-radius: 5px;
   padding: 16px;
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 1.7;
   white-space: pre-wrap;
   word-break: break-word;
@@ -242,8 +307,9 @@ pre.output {
 }
 
 .copied {
-  color: var(--ok-ink);
+  color: var(--green);
   font-size: 13px;
+  font-weight: 700;
 }
 
 .muted {
@@ -252,7 +318,7 @@ pre.output {
 }
 
 .privacy {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--muted);
   margin-top: 6px;
 }
