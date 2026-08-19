@@ -79,11 +79,22 @@ paciente → `formatRotina()` ou `formatMensalao()`.
   como linha-de-valor e não consomem TTL; linha-de-valor exige unidade logo
   após o número (`UNIT_AFTER`) ou linha só-número.
 - Datas POR BLOCO: um PDF traz exames de VÁRIAS datas; `Coletado em`
-  (prioridade, com hora) e `Liberado/Recebido em` (fallback, só data)
-  atualizam o marcador corrente — cada exame herda o mais recente
-  (`currentDTNow()`); aviso quando a data de liberação foi usada.
+  (prioridade) e `Liberado/Recebido em` (fallback, COM hora — preserva
+  exames seriados do mesmo dia) atualizam o marcador corrente — cada exame
+  herda o mais recente (`currentDTNow()`); aviso quando liberação foi usada.
 - Diferencial no singular (`Linfócito:`, `Segmentado neutrófilo:`) com
   absoluto + % na mesma linha → analitos `percent: true` preferem o %.
+- ROTINA funde blocos vizinhos (≤45 min, mesmo dia) SEM analito em comum
+  (painel liberado em lotes); analito repetido mantém blocos separados.
+- MENSALÃO: 2+ dosagens de Ur/Cr no mesmo dia → primeira normal, última em
+  linha própria com prefixo "Pós" (pré/pós-diálise).
+- Exames FORA do dicionário (FAN, anticardiolipina, C3, sorologias...):
+  capturados genericamente (`pendingGeneric`/`pushGeneric`, id `GEN:slug`),
+  aceitam valor numérico+unidade, título ("1/160") e qualitativo
+  ("Reagente..."); saem num bloco separado "DEMAIS EXAMES:" ao final dos
+  dois modelos — o modelo original fica preservado.
+- Limitação: seções de urina (EAS/urina I) seguem puladas — inclusive
+  dismorfismo eritrocitário — para proteger pH/Glic séricos.
 
 ## Limitação conhecida
 

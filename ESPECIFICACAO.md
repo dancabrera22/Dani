@@ -172,6 +172,24 @@ app/api/transcribe/route.js  POST {media_type, data(base64)} -> {text}
    fallback POR BLOCO — cada exame herda o marcador mais recente no texto.
    Aviso obrigatório quando liberação substituiu coleta.
 4. **Plaquetas em K/μL** (= mil): `RESULTADO: 93 K/μL` → `Plaq 93mil`.
+5. **Hora da liberação preservada**: exames seriados do mesmo dia (comuns em
+   internados) não colapsam; a ROTINA funde blocos vizinhos (≤45 min) sem
+   analito em comum (painel liberado em lotes) e mantém separados os que
+   repetem analito (pré/pós).
+6. **Pré/Pós-diálise (MENSALÃO)**: 2+ dosagens de Ur/Cr no mesmo dia em
+   horários diferentes → primeira linha normal e última com prefixo "Pós":
+   `07/08/26: Ur 17,6 Cr 0,16` / `07/08/26: Pós Ur 19,8 Cr 0,18`.
+7. **Exames fora do dicionário — SEMPRE incluídos**: cabeçalho em CAPS que
+   não casa com nenhum analito conhecido (e não é linha administrativa,
+   seção de hemograma/urina, registro/protocolo) vira exame genérico; o
+   valor aceita número+unidade (`39 GPL`), título (`1/160`) e qualitativo
+   (`Reagente, padrão pontilhado fino 1/160`; referência colada tipo
+   "Detectado Não Detectado" é aparada). Saída num bloco separado ao final
+   dos dois modelos, preservando o modelo original:
+   `DEMAIS EXAMES:` seguido de `DD/MM/AA: NOME valor` (um por linha).
+8. **Limitação assumida**: seções de urina (EAS/urina I, dismorfismo)
+   continuam fora — protegem pH/Glic séricos; incluir no futuro exigirá
+   rotulagem própria ("pH urinário").
 
 ## 7. UX (3 passos numa página)
 

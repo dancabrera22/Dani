@@ -3,6 +3,11 @@
 import { useMemo, useRef, useState } from 'react';
 import { parseReport, mergeResults, normalizeName } from '../lib/parse.js';
 import { formatRotina, formatMensalao } from '../lib/format.js';
+import {
+  parseImagingConclusions,
+  formatImaging,
+  mergeImaging,
+} from '../lib/imaging.js';
 
 // ---------- extração de PDF 100% local (pdf.js) ----------
 
@@ -91,7 +96,22 @@ pO2 .................. 38,0 mmHg
 HCO3 ................. 21,8 mEq/L
 BE ................... -3,1
 Saturação de O2 ...... 68,0 %
-Lactato .............. 1,4 mmol/L`;
+Lactato .............. 1,4 mmol/L
+
+LABORATORIO EXEMPLO - SETOR DE DIAGNÓSTICO POR IMAGEM
+Paciente: PACIENTE EXEMPLO DA SILVA
+Data do exame: 11/08/2026
+
+ULTRASSONOGRAFIA DE ABDOME TOTAL
+Técnica: exame realizado com transdutor convexo multifrequencial.
+Fígado de dimensões normais, contornos regulares, ecotextura preservada.
+Vesícula biliar normodistendida, sem cálculos. Rins tópicos, sem dilatação.
+
+CONCLUSÃO:
+Exame ultrassonográfico do abdome dentro dos limites da normalidade.
+Ausência de líquido livre na cavidade.
+
+Dr. Radiologista Exemplo - CRM 00000`;
 
 // ---------- componente ----------
 
@@ -130,10 +150,19 @@ export default function Home() {
     [sources]
   );
 
+  const mergedImaging = useMemo(
+    () => mergeImaging(sources.map((s) => s.parsed.imaging || [])),
+    [sources]
+  );
+
   const output = useMemo(() => {
-    if (!activeName || nameConflict || merged.length === 0) return '';
+    if (!activeName || nameConflict) return '';
+    if (format === 'imagem') {
+      return mergedImaging.length > 0 ? formatImaging(mergedImaging) : '';
+    }
+    if (merged.length === 0) return '';
     return format === 'rotina' ? formatRotina(merged) : formatMensalao(merged);
-  }, [activeName, nameConflict, merged, format]);
+  }, [activeName, nameConflict, merged, mergedImaging, format]);
 
   const warnings = useMemo(() => {
     const all = [];
@@ -152,6 +181,9 @@ export default function Home() {
 
   function addTextSource(label, kind, text) {
     const parsed = parseReport(text);
+    const imaging = parseImagingConclusions(text);
+    parsed.imaging = imaging.items;
+    parsed.warnings.push(...imaging.warnings);
     setSources((prev) => [...prev, { id: nextId++, label, kind, text, parsed }]);
     invalidateConfirmation();
   }
@@ -248,12 +280,22 @@ export default function Home() {
   return (
     <div className="wrap">
       <header className="app">
-        <h1>Transcritor de Exames</h1>
-        <p>
-          Laudos → MODELO ROTINA / MENSALÃO. Texto e PDFs com texto são
-          processados <b>100% localmente</b>; imagens e PDFs escaneados usam a
-          API da Anthropic (opcional).
-        </p>
+        <img
+          src="/logo-icr.jpg"
+          alt="Instituto da Criança"
+          className="logo"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+          }}
+        />
+        <div>
+          <h1>Transcritor de Exames</h1>
+          <p>
+            Laudos → ROTINA / MENSALÃO / IMAGEM. Texto e PDFs com texto são
+            processados <b>100% localmente</b>; imagens e PDFs escaneados usam
+            a API da Anthropic (opcional).
+          </p>
+        </div>
       </header>
 
       {/* 1. ENTRADAS */}
@@ -304,7 +346,10 @@ export default function Home() {
                   <span className="chip none">nome não encontrado</span>
                 )}
                 <span className="count">
-                  {s.parsed.results.length} exame(s) reconhecido(s)
+                  {s.parsed.results.length} exame(s)
+                  {s.parsed.imaging?.length
+                    ? ` · ${s.parsed.imaging.length} laudo(s) de imagem`
+                    : ''}
                 </span>
                 <span className="spacer" />
                 <button className="small danger" onClick={() => removeSource(s.id)}>
@@ -397,6 +442,12 @@ export default function Home() {
               >
                 MENSALÃO
               </button>
+              <button
+                className={format === 'imagem' ? 'active' : ''}
+                onClick={() => setFormat('imagem')}
+              >
+                IMAGEM
+              </button>
             </div>
             <span className="spacer" />
             <button className="primary" onClick={handleCopy} disabled={!output}>
@@ -411,8 +462,12 @@ export default function Home() {
             </p>
           ) : nameConflict ? (
             <p className="muted">Resolva o conflito de pacientes acima.</p>
-          ) : merged.length === 0 ? (
-            <p className="muted">Nenhum exame reconhecido nas fontes adicionadas.</p>
+          ) : output === '' ? (
+            <p className="muted">
+              {format === 'imagem'
+                ? 'Nenhuma conclusão de laudo de imagem reconhecida nas fontes adicionadas.'
+                : 'Nenhum exame reconhecido nas fontes adicionadas.'}
+            </p>
           ) : (
             <pre className="output">{output}</pre>
           )}

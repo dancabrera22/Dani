@@ -51,12 +51,25 @@ body {
   padding: 0 20px 80px;
 }
 
-/* cabeçalho: gradiente teal → branco → lavanda */
+/* cabeçalho: gradiente teal → branco → lavanda, logo à esquerda */
 header.app {
   margin: 0 -20px 20px;
-  padding: 18px 24px 14px;
+  padding: 14px 24px 12px;
   background: linear-gradient(90deg, #cfe7e4 0%, #ffffff 45%, #ded0ef 100%);
   border-bottom: 1px solid var(--lav-line);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+header.app .logo {
+  height: 56px;
+  width: auto;
+  flex-shrink: 0;
+  background: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  box-sizing: content-box;
 }
 header.app h1 {
   font-size: 21px;
