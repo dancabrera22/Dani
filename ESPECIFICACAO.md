@@ -179,14 +179,31 @@ app/api/transcribe/route.js  POST {media_type, data(base64)} -> {text}
 6. **Pré/Pós-diálise (MENSALÃO)**: 2+ dosagens de Ur/Cr no mesmo dia em
    horários diferentes → primeira linha normal e última com prefixo "Pós":
    `07/08/26: Ur 17,6 Cr 0,16` / `07/08/26: Pós Ur 19,8 Cr 0,18`.
-7. **Exames fora do dicionário — SEMPRE incluídos**: cabeçalho em CAPS que
-   não casa com nenhum analito conhecido (e não é linha administrativa,
-   seção de hemograma/urina, registro/protocolo) vira exame genérico; o
-   valor aceita número+unidade (`39 GPL`), título (`1/160`) e qualitativo
-   (`Reagente, padrão pontilhado fino 1/160`; referência colada tipo
-   "Detectado Não Detectado" é aparada). Saída num bloco separado ao final
-   dos dois modelos, preservando o modelo original:
-   `DEMAIS EXAMES:` seguido de `DD/MM/AA: NOME valor` (um por linha).
+7. **Exames fora do dicionário — SEMPRE incluídos, no formato mais
+   compacto possível**: bloco `DEMAIS EXAMES:` ao final dos dois modelos,
+   uma linha por dia, exames separados por ` // `:
+   `10/08/26: Anti HIV 1/2 NR // HBsAg NR // Toxo IgG <0,2 IgM 0,08 //
+   Anti-Cardiolipina IgG 37,1 IgM 8,0 // FAN nuclear pontilhado fino 1/80`
+   - Abreviações: Não Reagente→NR, Reagente→R, Não Detectado→ND,
+     Negativo→Neg, Positivo→Pos; unidades derrubadas (39 GPL→39); títulos
+     (1/80) mantidos; "Reagente, padrão X"→só o padrão; "Inferior/Superior
+     a N"→`<N`/`>N`.
+   - IgG/IgM do MESMO exame agrupados numa entrada; siglas preferidas
+     (parênteses "(EBV)" vence; CMV/EBV/Toxo/HSV mapeados; em
+     "Hepatite B - HBeAg" a sigla do 2º trecho vence).
+   - Captura: título em CAPS (ICr) OU caixa mista com termo de
+     sorologia/autoanticorpo iniciando em maiúscula (DASA-like); valor
+     inline na própria linha, em "Resultado:" posterior, ou qualitativo.
+   - Defesas: faixa em linha própria ("0,50 a 1,00") NUNCA é valor
+     (`RANGE_LINE` — este layout imprime a referência ANTES do resultado);
+     blocos "Histórico"/"Gráfico de Histórico" pulados (resultados
+     antigos); rodapé "Locais de execução" ignorado (lista nomes de
+     exames); hash de assinatura (64 hex) pulado; frases de nota (>6
+     palavras ou com ":") rejeitadas como valor; "(Vide Intervalo...)"
+     tolera parêntese truncado; "N IgA/IgG/IgM" não é valor+unidade
+     (nome quebrado); itens IGNORE (CHCM/RDW/VPM) nunca viram genérico.
+   - Leucócitos em layout %|absoluto ("Leucócitos 100 9.240"): o 100 da
+     coluna % é pulado (`twoCol`).
 8. **Urina (grupo U1)**: seções de urina têm modo próprio — itens saem como
    `U1 pH 7,0 Dens 1012 Leuco >1 MILHÃO Erit 265000 Bacterias NUMEROSAS
    Nitrito POSITIVO ...` (ROTINA: no bloco da coleta; MENSALÃO: linha
