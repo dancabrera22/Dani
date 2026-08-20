@@ -93,8 +93,12 @@ paciente → `formatRotina()` ou `formatMensalao()`.
   aceitam valor numérico+unidade, título ("1/160") e qualitativo
   ("Reagente..."); saem num bloco separado "DEMAIS EXAMES:" ao final dos
   dois modelos — o modelo original fica preservado.
-- Limitação: seções de urina (EAS/urina I) seguem puladas — inclusive
-  dismorfismo eritrocitário — para proteger pH/Glic séricos.
+- Urina (EAS/urina I): modo próprio — grupo "U1" com ids `U-*`
+  (`URINE_ANALYTES`), resultados em CAPS × referências em caixa mista,
+  sedimento prevalece sobre tira reativa (Leuco/Erit), dismorfismo com
+  texto. Relações P/C e M/C são analitos normais (extras), capturados
+  também dentro da seção de urina (título da relação pode estar na MESMA
+  linha que dispara `URINE_SECTION`). pH/Glic séricos continuam protegidos.
 
 ## Limitação conhecida
 

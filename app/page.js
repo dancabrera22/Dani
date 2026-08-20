@@ -347,6 +347,16 @@ export default function Home() {
                 )}
                 <span className="count">
                   {s.parsed.results.length} exame(s)
+                  {(() => {
+                    const gen = s.parsed.results.filter((r) =>
+                      r.id.startsWith('GEN:')
+                    ).length;
+                    const uri = s.parsed.results.filter((r) => r.urine).length;
+                    return (
+                      (gen ? ` · ${gen} fora do modelo` : '') +
+                      (uri ? ` · ${uri} urinário(s)` : '')
+                    );
+                  })()}
                   {s.parsed.imaging?.length
                     ? ` · ${s.parsed.imaging.length} laudo(s) de imagem`
                     : ''}

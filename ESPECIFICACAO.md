@@ -187,9 +187,16 @@ app/api/transcribe/route.js  POST {media_type, data(base64)} -> {text}
    "Detectado Não Detectado" é aparada). Saída num bloco separado ao final
    dos dois modelos, preservando o modelo original:
    `DEMAIS EXAMES:` seguido de `DD/MM/AA: NOME valor` (um por linha).
-8. **Limitação assumida**: seções de urina (EAS/urina I, dismorfismo)
-   continuam fora — protegem pH/Glic séricos; incluir no futuro exigirá
-   rotulagem própria ("pH urinário").
+8. **Urina (grupo U1)**: seções de urina têm modo próprio — itens saem como
+   `U1 pH 7,0 Dens 1012 Leuco >1 MILHÃO Erit 265000 Bacterias NUMEROSAS
+   Nitrito POSITIVO ...` (ROTINA: no bloco da coleta; MENSALÃO: linha
+   própria do dia). Resultados vêm em CAPS e referências em caixa mista
+   (discriminador); sedimento quantitativo prevalece sobre a tira reativa
+   em Leuco/Erit; dismorfismo eritrocitário sai com o texto ("Ausência de
+   hematúria / dismorfismo"). Relações proteína/creatinina e
+   microalbumina/creatinina saem como **P/C** e **M/C** (extras normais),
+   inclusive quando o título da relação está na própria linha que dispara a
+   seção de urina. pH/Glic séricos permanecem protegidos.
 
 ## 7. UX (3 passos numa página)
 
