@@ -173,9 +173,25 @@ app/api/transcribe/route.js  POST {media_type, data(base64)} -> {text}
    Aviso obrigatório quando liberação substituiu coleta.
 4. **Plaquetas em K/μL** (= mil): `RESULTADO: 93 K/μL` → `Plaq 93mil`.
 5. **Hora da liberação preservada**: exames seriados do mesmo dia (comuns em
-   internados) não colapsam; a ROTINA funde blocos vizinhos (≤45 min) sem
-   analito em comum (painel liberado em lotes) e mantém separados os que
-   repetem analito (pré/pós).
+   internados) não colapsam; ROTINA/PRISMA fundem liberações vizinhas
+   (**≤2 h**, mesmo dia) sob a PRIMEIRA liberação e mantêm separados os
+   blocos que repetem analito (pré/pós) — exceto cálcio iônico (vira o par
+   CaI/CaM). Os cabeçalhos dos blocos são só `DD/MM/AA (HH:MM):` — sem
+   "MODELO ROTINA/MENSALÃO" (a modalidade já foi escolhida na interface).
+5b. **Gasometria**: Na, K e Cl medidos pelo analisador de gases NÃO são
+   transcritos (vale o do laboratório). No ICr o bloco vai do título
+   "GASOMETRIA..." até a próxima solicitação/liberação e inclui os
+   sub-blocos "SODIO/POTÁSSIO/CLORO, SANGUE TOTAL"; os do laboratório vêm
+   "(SORO)". pH/pCO2/HCO3/Lact/Glic/CaI da gasometria continuam.
+5c. **Dois cálcios iônicos na mesma amostra** (gasometria + laboratório,
+   mesma liberação ou liberações ≤2 h): o maior é **CaI** (paciente) e o
+   menor **CaM** (cálcio da máquina). O 2º CaI da mesma liberação é
+   guardado como `CaI2` (não descartado como duplicata). Creatinina >30 é
+   descartada (plausibilidade).
+5d. **MODELO PRISMA** (4ª modalidade, terapia contínua com citrato): igual à
+   ROTINA, com os cálcios em mmol/L entre parênteses (valor/4, 2 casas) e,
+   ao final de cada coleta, a relação cálcio total/cálcio iônico do
+   paciente: `CaI 4,89(1,22) CaM 1,10(0,28) … R CaT/CaI 10,4/4,89 = 2,127`.
 6. **Pré/Pós-diálise (MENSALÃO)**: 2+ dosagens de Ur/Cr no mesmo dia em
    horários diferentes → primeira linha normal e última com prefixo "Pós":
    `07/08/26: Ur 17,6 Cr 0,16` / `07/08/26: Pós Ur 19,8 Cr 0,18`.

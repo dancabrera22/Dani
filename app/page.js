@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { parseReport, mergeResults, normalizeName } from '../lib/parse.js';
-import { formatRotina, formatMensalao } from '../lib/format.js';
+import { formatRotina, formatMensalao, formatPrisma } from '../lib/format.js';
 import {
   parseImagingConclusions,
   formatImaging,
@@ -161,6 +161,7 @@ export default function Home() {
       return mergedImaging.length > 0 ? formatImaging(mergedImaging) : '';
     }
     if (merged.length === 0) return '';
+    if (format === 'prisma') return formatPrisma(merged);
     return format === 'rotina' ? formatRotina(merged) : formatMensalao(merged);
   }, [activeName, nameConflict, merged, mergedImaging, format]);
 
@@ -451,6 +452,13 @@ export default function Home() {
                 onClick={() => setFormat('mensalao')}
               >
                 MENSALÃO
+              </button>
+              <button
+                className={format === 'prisma' ? 'active' : ''}
+                onClick={() => setFormat('prisma')}
+                title="Terapia contínua com citrato: CaI/CaM em mmol/L e relação CaT/CaI"
+              >
+                PRISMA
               </button>
               <button
                 className={format === 'imagem' ? 'active' : ''}

@@ -8,10 +8,13 @@ alterar o parser ou os formatadores.
 ## Comandos
 
 ```bash
-npm run dev     # http://localhost:3000
-npm run build   # valida compilação
-node <script>   # lib/ é ESM puro — testável direto no Node, sem Next
+npm run dev                              # http://localhost:3000
+npm run build                            # valida compilação
+node scripts/regression.mjs              # regressão sintética (SAMPLE da UI + sorologia/urina/prisma)
+node scripts/extract-pdf.mjs x.pdf --out /tmp/dir   # PDF -> txt (mesma reconstrução do app)
+node scripts/trace.mjs /tmp/dir/x.txt [--only Cr,CaI] [--quiet]  # origem de cada valor + 3 modelos
 ```
+Laudos reais só em diretórios temporários — nunca no repositório.
 
 Teste rápido do parser (sem browser): crie um `.mjs` que importe
 `lib/parse.js` + `lib/format.js`, passe um laudo sintético por `parseReport()`
@@ -84,8 +87,13 @@ paciente → `formatRotina()` ou `formatMensalao()`.
   herda o mais recente (`currentDTNow()`); aviso quando liberação foi usada.
 - Diferencial no singular (`Linfócito:`, `Segmentado neutrófilo:`) com
   absoluto + % na mesma linha → analitos `percent: true` preferem o %.
-- ROTINA funde blocos vizinhos (≤45 min, mesmo dia) SEM analito em comum
-  (painel liberado em lotes); analito repetido mantém blocos separados.
+- ROTINA/PRISMA fundem liberações vizinhas (≤2 h, mesmo dia) sob a primeira;
+  analito repetido mantém blocos separados — exceto CaI (par CaI/CaM:
+  maior = paciente, menor = máquina; 2º CaI da mesma liberação = `CaI2`).
+- Na/K/Cl do bloco de gasometria (`inGaso`: do título até a próxima
+  solicitação/liberação/assinatura) são descartados. Cr > 30 descartada.
+- PRISMA (`formatPrisma`): ROTINA + cálcios com (valor/4) em mmol/L +
+  `R CaT/CaI` ao final do bloco. Cabeçalhos sem prefixo "MODELO ...".
 - MENSALÃO: 2+ dosagens de Ur/Cr no mesmo dia → primeira normal, última em
   linha própria com prefixo "Pós" (pré/pós-diálise).
 - Exames FORA do dicionário (FAN, anticardiolipina, C3, sorologias...):
