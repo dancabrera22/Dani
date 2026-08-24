@@ -24,6 +24,16 @@ function run(title, text) {
 run('SAMPLE (UI)', SAMPLE);
 
 run(
+  'P/C e M/C CALCULADOS dos componentes',
+  `Paciente: TESTE CALCULO
+Coletado em: 20/08/2026 às 07:00
+Proteína Urinária 30 mg/dL
+Creatinina Urinária 0,60 g/L
+Microalbuminúria 18 mg/L
+Tacrolimus (FK506) 7,2 ng/mL`
+);
+
+run(
   'SOROLOGIAS + URINA + PRISMA',
   `Paciente: TESTE REGRESSAO
 Coletado em: 18/08/2026 às 08:00
@@ -46,10 +56,25 @@ CÁLCIO IÔNICO SANGUE TOTAL
 4,89 mg/dL 4,89 5,49
 CALCIO (SORO)
 RESULTADO: 10,4 mg/dL 8,40 10,20
+TACROLIMUS,SANGUE
+Método: CMIA
+RESULTADO: 6,8 ng/mL 5 15
 URINA I CARACTERES FÍSICOS E BIOQUIMICOS, URINA ISOLADA
 pH 6,0 4,50 7,80
 Densidade 1.015 1003 1029
 Nitrito NEGATIVO 0 0
+Proteínas POSITIVO + 0 0
+Glicose NEGATIVO 0 0
+Sangue POSITIVO +++ 0 0
+Bactérias NUMEROSAS 0 0
+Leveduras AUSENTE 0 0
+Células epiteliais RARAS 0 0
+URINA I SEDIMENTO QUANTITATIVO
+Leucócitos 12000 mL 0 7000
+Eritrócitos 800 mL 0 3000
+RELAÇÃO PROTEÍNA/CREATININA, URINA ISOLADA
+Método: Cálculo
+RESULTADO: 0,45 mg/mg
 FAN, SANGUE
 Resultado: Reagente, padrão nuclear pontilhado fino 1/80
 EBV IgG,SANGUE
