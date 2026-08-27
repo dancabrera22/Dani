@@ -33,7 +33,20 @@ Microalbuminúria 18 mg/L
 Tacrolimus (FK506) 7,2 ng/mL
 CALCIO (URINA ISOLADA)
 Método: Arsenazo
-12,4 mg/dL 0 20`
+12,4 mg/dL 0 20
+SODIO (URINA ISOLADA)
+55 mEq/L 0 0
+POTASSIO (URINA ISOLADA)
+30 mEq/L 0 0
+CLORO (URINA ISOLADA)
+70 mEq/L 0 0
+SODIO (SORO)
+138 mEq/L 136 145
+CLORO (SORO)
+100 mEq/L 98 107
+BICARBONATO
+22 mmol/L 22 29
+Albumina 3,0 g/dL 3,8 5,4`
 );
 
 run(
