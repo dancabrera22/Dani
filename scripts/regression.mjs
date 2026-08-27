@@ -30,7 +30,10 @@ Coletado em: 20/08/2026 às 07:00
 Proteína Urinária 30 mg/dL
 Creatinina Urinária 0,60 g/L
 Microalbuminúria 18 mg/L
-Tacrolimus (FK506) 7,2 ng/mL`
+Tacrolimus (FK506) 7,2 ng/mL
+CALCIO (URINA ISOLADA)
+Método: Arsenazo
+12,4 mg/dL 0 20`
 );
 
 run(
