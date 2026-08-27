@@ -46,7 +46,18 @@ CLORO (SORO)
 100 mEq/L 98 107
 BICARBONATO
 22 mmol/L 22 29
-Albumina 3,0 g/dL 3,8 5,4`
+Albumina 3,0 g/dL 3,8 5,4
+Potássio: 4,0 mEq/L 3,5 5,1
+Fósforo: 4,2 mg/dL 3,3 5,4
+Creatinina: 0,80 mg/dL 0,5 1
+FOSFORO (URINA ISOLADA)
+33 mg/dL 0 0
+OSMOLALIDADE URINARIA
+500 mOsm/kg 50 1200
+Osmolalidade: 290 mOsm/kg 275 295
+Imunoglobulina G 850 mg/dL 700 1600
+Imunoglobulina A 120 mg/dL 70 400
+IgE total 45 UI/mL 0 100`
 );
 
 run(
