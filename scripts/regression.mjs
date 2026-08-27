@@ -3,7 +3,7 @@
 // Uso: node scripts/regression.mjs
 import { readFileSync } from 'node:fs';
 import { parseReport } from '../lib/parse.js';
-import { formatRotina, formatMensalao, formatPrisma } from '../lib/format.js';
+import { formatRotina, formatMensalao, formatPrisma, formatTubulopatias } from '../lib/format.js';
 import { parseImagingConclusions, formatImaging } from '../lib/imaging.js';
 
 const page = readFileSync(new URL('../app/page.js', import.meta.url), 'utf8');
@@ -17,6 +17,8 @@ function run(title, text) {
   console.log('--- MENSALÃO ---\n' + formatMensalao(p.results));
   const prisma = formatPrisma(p.results);
   if (prisma) console.log('--- PRISMA ---\n' + prisma);
+  const tub = formatTubulopatias(p.results);
+  if (tub) console.log('--- TUBULOPATIAS ---\n' + tub);
   const img = parseImagingConclusions(text);
   if (img.items.length) console.log('--- IMAGEM ---\n' + formatImaging(img.items));
 }

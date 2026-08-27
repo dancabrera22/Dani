@@ -2,7 +2,7 @@
 // Uso: node scripts/trace.mjs <laudo.txt> [--only Cr,CaI] [--quiet]
 import { readFileSync } from 'node:fs';
 import { parseReport } from '../lib/parse.js';
-import { formatRotina, formatMensalao, formatPrisma } from '../lib/format.js';
+import { formatRotina, formatMensalao, formatPrisma, formatTubulopatias } from '../lib/format.js';
 
 const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith('--') && !args[args.indexOf(a) - 1]?.startsWith('--only'));
@@ -23,3 +23,4 @@ if (!quiet) {
 console.log('\n--- ROTINA ---\n' + formatRotina(p.results));
 console.log('\n--- MENSALÃO ---\n' + formatMensalao(p.results));
 console.log('\n--- PRISMA ---\n' + formatPrisma(p.results));
+console.log('\n--- TUBULOPATIAS ---\n' + formatTubulopatias(p.results));

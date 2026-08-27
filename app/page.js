@@ -2,7 +2,12 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { parseReport, mergeResults, normalizeName } from '../lib/parse.js';
-import { formatRotina, formatMensalao, formatPrisma } from '../lib/format.js';
+import {
+  formatRotina,
+  formatMensalao,
+  formatPrisma,
+  formatTubulopatias,
+} from '../lib/format.js';
 import {
   parseImagingConclusions,
   formatImaging,
@@ -162,6 +167,7 @@ export default function Home() {
     }
     if (merged.length === 0) return '';
     if (format === 'prisma') return formatPrisma(merged);
+    if (format === 'tubulo') return formatTubulopatias(merged);
     return format === 'rotina' ? formatRotina(merged) : formatMensalao(merged);
   }, [activeName, nameConflict, merged, mergedImaging, format]);
 
@@ -461,6 +467,13 @@ export default function Home() {
                 PRISMA
               </button>
               <button
+                className={format === 'tubulo' ? 'active' : ''}
+                onClick={() => setFormat('tubulo')}
+                title="Investigação tubular: componentes urinários, relações e gradientes com a conta armada"
+              >
+                TUBULOPATIAS
+              </button>
+              <button
                 className={format === 'imagem' ? 'active' : ''}
                 onClick={() => setFormat('imagem')}
               >
@@ -484,7 +497,9 @@ export default function Home() {
             <p className="muted">
               {format === 'imagem'
                 ? 'Nenhuma conclusão de laudo de imagem reconhecida nas fontes adicionadas.'
-                : 'Nenhum exame reconhecido nas fontes adicionadas.'}
+                : format === 'tubulo'
+                  ? 'Nenhuma dosagem urinária/tubular reconhecida nas fontes adicionadas.'
+                  : 'Nenhum exame reconhecido nas fontes adicionadas.'}
             </p>
           ) : (
             <pre className="output">{output}</pre>
