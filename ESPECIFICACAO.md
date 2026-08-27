@@ -192,6 +192,27 @@ app/api/transcribe/route.js  POST {media_type, data(base64)} -> {text}
    ROTINA, com os cálcios em mmol/L entre parênteses (valor/4, 2 casas) e,
    ao final de cada coleta, a relação cálcio total/cálcio iônico do
    paciente: `CaI 4,89(1,22) CaM 1,10(0,28) … R CaT/CaI 10,4/4,89 = 2,127`.
+5e. **Seção TUBULOPATIAS** (após DEMAIS EXAMES, em todas as modalidades):
+   nasce quando a coleta tem dosagens urinárias. Traz (i) os componentes
+   normalizados p/ mg/dL: `NaU KU ClU CaU PU ProtU AlbU CrU OsmU`; (ii) as
+   relações P/C (mg/mg), M/C (mg/g) e Ca/Cr (mg/mg) — impressas no laudo ou
+   CALCULADAS dos componentes; (iii) os índices com a CONTA ARMADA:
+   `AG 138-(100+22) = 16 (corr Alb 3,0 = 18,5)` [AGc = AG+2,5×(4−Alb), só se
+   Alb<4] // `AGu (55+30)-70 = +15` // `TRP 1-(PUxCr)/(PxCrU) = 89,5%` //
+   `FEK (KUxCr)/(KxCrU) = 10%` // `FENa … = 0,5%` //
+   `TTKG (KU/K)/(OsmU/Osm) = 4,4` [só se OsmU>Osm]. Sem urinários, AG
+   sérico sai no DEMAIS. Pendências de relação morrem na próxima
+   solicitação (nunca cruzam blocos); títulos de dosagem urinária
+   "(URINA ISOLADA)" NÃO ligam o modo EAS. Layout ICr: relação com nome
+   quebrado em colunas → valor `mg/g` capturado por contexto de bloco.
+5f. **Extras diretos**: NS FK (tacrolimus/FK506), Osm sérica, IgG/IgA/IgM/
+   IgE séricas (padrões restritos a dosagem — nunca o IgG de sorologias)
+   inline nos modelos. TG na linha do colesterol. "Antígeno P24" mascarado;
+   plausibilidade: Cr>30 e P>20 descartados.
+5g. **DEMAIS EXAMES compacto (sorologias SIGH)**: resultado com nome
+   repetido na linha, legendas "Reagente: >= X" NUNCA são resultado
+   (evita inversão NR/R), "Valor:/Índice:/S/CO:" anexado ao qualitativo,
+   frases de nota/datas rejeitadas como valor.
 6. **Pré/Pós-diálise (MENSALÃO)**: 2+ dosagens de Ur/Cr no mesmo dia em
    horários diferentes → primeira linha normal e última com prefixo "Pós":
    `07/08/26: Ur 17,6 Cr 0,16` / `07/08/26: Pós Ur 19,8 Cr 0,18`.
