@@ -168,10 +168,12 @@ export default function Home() {
       return mergedImaging.length > 0 ? formatImaging(mergedImaging) : '';
     }
     if (merged.length === 0) return '';
-    if (format === 'prisma') return formatPrisma(merged);
+    if (format === 'prisma') return formatPrisma(merged, { weight, height });
     if (format === 'tubulo')
       return formatTubulopatias(merged, { weight, height });
-    return format === 'rotina' ? formatRotina(merged) : formatMensalao(merged);
+    return format === 'rotina'
+      ? formatRotina(merged, { weight, height })
+      : formatMensalao(merged, { weight, height });
   }, [activeName, nameConflict, merged, mergedImaging, format, weight, height]);
 
   const warnings = useMemo(() => {
@@ -493,7 +495,7 @@ export default function Home() {
             {copied && <span className="copied">copiado ✓</span>}
           </div>
 
-          {format === 'tubulo' && confirmedName && !nameConflict ? (
+          {format !== 'imagem' && confirmedName && !nameConflict ? (
             <div className="row measures">
               <label>
                 Peso{' '}
@@ -520,8 +522,9 @@ export default function Home() {
                 />
               </label>
               <span className="muted">
-                Peso → superfície corpórea (Costeff) e clearance corrigido para
-                1,73 m². Com a altura, usa Mosteller e calcula o eGFR Schwartz.
+                Altura → eGFR Schwartz (0,413 × altura / Cr). Peso →
+                superfície corpórea (Costeff, ou Mosteller com a altura) e
+                clearance de 24 h corrigido para 1,73 m².
               </span>
             </div>
           ) : null}
