@@ -365,3 +365,10 @@ pre.output {
   color: var(--green);
   font-size: 13.5px;
 }
+.row.measures.hd {
+  margin-top: -6px;
+}
+.row.measures .hdlabel {
+  font-weight: 600;
+  flex: 0 0 auto;
+}

@@ -132,6 +132,9 @@ export default function Home() {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [measuresFor, setMeasuresFor] = useState(null);
+  const [hdTime, setHdTime] = useState('');
+  const [hdUF, setHdUF] = useState('');
+  const [hdSessions, setHdSessions] = useState('');
   const [busy, setBusy] = useState(null); // label do arquivo em processamento
   const [apiError, setApiError] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -175,8 +178,11 @@ export default function Home() {
       return formatTubulopatias(merged, { weight, height });
     return format === 'rotina'
       ? formatRotina(merged, { weight, height })
-      : formatMensalao(merged, { weight, height });
-  }, [activeName, nameConflict, merged, mergedImaging, format, weight, height]);
+      : formatMensalao(merged, { weight, height, hdTime, hdUF, hdSessions });
+  }, [
+    activeName, nameConflict, merged, mergedImaging, format,
+    weight, height, hdTime, hdUF, hdSessions,
+  ]);
 
   const derived = useMemo(
     () => patientDerived(merged, { weight, height }),
@@ -205,6 +211,9 @@ export default function Home() {
     if (measuresFor && measuresFor !== key) {
       setWeight('');
       setHeight('');
+      setHdTime('');
+      setHdUF('');
+      setHdSessions('');
     }
     setMeasuresFor(key);
     setConfirmedName(name);
@@ -500,6 +509,31 @@ export default function Home() {
                     p/ 1,73 m².
                   </>
                 )}
+              </span>
+            </div>
+          )}
+
+          {!nameConflict && (
+            <div className="row measures hd">
+              <span className="muted hdlabel">Diálise (p/ Kt/V):</span>
+              <label>
+                Tempo{' '}
+                <input type="number" min="0" step="5" value={hdTime}
+                  onChange={(e) => setHdTime(e.target.value)} placeholder="min" />
+              </label>
+              <label>
+                UF{' '}
+                <input type="number" min="0" step="50" value={hdUF}
+                  onChange={(e) => setHdUF(e.target.value)} placeholder="mL" />
+              </label>
+              <label>
+                Sessões{' '}
+                <input type="number" min="1" max="7" step="1" value={hdSessions}
+                  onChange={(e) => setHdSessions(e.target.value)} placeholder="3/sem" />
+              </label>
+              <span className="muted">
+                Com ureia pré e pós no mesmo dia + peso: Kt/V da sessão e
+                stdKt/V semanal (MENSALÃO).
               </span>
             </div>
           )}
