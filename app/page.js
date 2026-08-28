@@ -130,6 +130,7 @@ export default function Home() {
   const [manualName, setManualName] = useState('');
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
+  const [measuresFor, setMeasuresFor] = useState(null);
   const [busy, setBusy] = useState(null); // label do arquivo em processamento
   const [apiError, setApiError] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -189,9 +190,18 @@ export default function Home() {
   function invalidateConfirmation() {
     setConfirmedName(null);
     setCopied(false);
-    // peso/altura são do paciente — nunca podem sobrar para o próximo laudo
-    setWeight('');
-    setHeight('');
+  }
+
+  // peso/altura são do paciente: apagados quando o paciente muda (nunca
+  // sobram medidas de um paciente para o laudo do próximo)
+  function confirmPatient(name) {
+    const key = normalizeName(name || '');
+    if (measuresFor && measuresFor !== key) {
+      setWeight('');
+      setHeight('');
+    }
+    setMeasuresFor(key);
+    setConfirmedName(name);
   }
 
   function addTextSource(label, kind, text) {
@@ -411,7 +421,7 @@ export default function Home() {
                   Paciente detectado: <strong>{detectedNames[0]}</strong>
                   <button
                     className="primary"
-                    onClick={() => setConfirmedName(detectedNames[0])}
+                    onClick={() => confirmPatient(detectedNames[0])}
                   >
                     Confirmar paciente
                   </button>
@@ -429,13 +439,46 @@ export default function Home() {
                     className="primary"
                     disabled={!canConfirm}
                     onClick={() =>
-                      setConfirmedName(manualName.trim().toUpperCase())
+                      confirmPatient(manualName.trim().toUpperCase())
                     }
                   >
                     Confirmar paciente
                   </button>
                 </>
               )}
+            </div>
+          )}
+
+          {!nameConflict && (
+            <div className="row measures">
+              <label>
+                Peso{' '}
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.1"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  placeholder="kg"
+                />
+              </label>
+              <label>
+                Altura{' '}
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.5"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  placeholder="cm"
+                />
+              </label>
+              <span className="muted">
+                Opcional. Altura → eGFR Schwartz (0,413 × altura / Cr); peso →
+                superfície corpórea e clearance de 24 h corrigido p/ 1,73 m².
+              </span>
             </div>
           )}
 
@@ -494,40 +537,6 @@ export default function Home() {
             </button>
             {copied && <span className="copied">copiado ✓</span>}
           </div>
-
-          {format !== 'imagem' && confirmedName && !nameConflict ? (
-            <div className="row measures">
-              <label>
-                Peso{' '}
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="0.1"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                  placeholder="kg"
-                />
-              </label>
-              <label>
-                Altura{' '}
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="0.5"
-                  value={height}
-                  onChange={(e) => setHeight(e.target.value)}
-                  placeholder="cm (opcional)"
-                />
-              </label>
-              <span className="muted">
-                Altura → eGFR Schwartz (0,413 × altura / Cr). Peso →
-                superfície corpórea (Costeff, ou Mosteller com a altura) e
-                clearance de 24 h corrigido para 1,73 m².
-              </span>
-            </div>
-          ) : null}
 
           {!confirmedName && !nameConflict ? (
             <p className="muted">
