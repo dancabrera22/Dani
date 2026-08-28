@@ -361,3 +361,7 @@ pre.output {
   min-width: 240px;
   font-size: 12px;
 }
+.row.measures .derived {
+  color: var(--green);
+  font-size: 13.5px;
+}

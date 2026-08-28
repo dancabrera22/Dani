@@ -7,6 +7,7 @@ import {
   formatMensalao,
   formatPrisma,
   formatTubulopatias,
+  patientDerived,
 } from '../lib/format.js';
 import {
   parseImagingConclusions,
@@ -176,6 +177,11 @@ export default function Home() {
       ? formatRotina(merged, { weight, height })
       : formatMensalao(merged, { weight, height });
   }, [activeName, nameConflict, merged, mergedImaging, format, weight, height]);
+
+  const derived = useMemo(
+    () => patientDerived(merged, { weight, height }),
+    [merged, weight, height]
+  );
 
   const warnings = useMemo(() => {
     const all = [];
@@ -476,8 +482,24 @@ export default function Home() {
                 />
               </label>
               <span className="muted">
-                Opcional. Altura → eGFR Schwartz (0,413 × altura / Cr); peso →
-                superfície corpórea e clearance de 24 h corrigido p/ 1,73 m².
+                {derived.egfr || derived.bsa ? (
+                  <b className="derived">
+                    {derived.egfr
+                      ? `eGFR ${derived.egfr.toFixed(1).replace('.', ',')} mL/min/1,73m²`
+                      : ''}
+                    {derived.egfr && derived.bsa ? ' · ' : ''}
+                    {derived.bsa
+                      ? `SC ${derived.bsa.toFixed(2).replace('.', ',')} m²`
+                      : ''}
+                  </b>
+                ) : (
+                  <>
+                    Opcional. <b>Altura</b> → eGFR Schwartz (0,413 × altura /
+                    Cr){derived.hasCr ? '' : ' — exige creatinina no laudo'};
+                    peso → superfície corpórea e clearance de 24 h corrigido
+                    p/ 1,73 m².
+                  </>
+                )}
               </span>
             </div>
           )}
