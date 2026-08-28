@@ -128,6 +128,8 @@ export default function Home() {
   const [format, setFormat] = useState('rotina');
   const [confirmedName, setConfirmedName] = useState(null);
   const [manualName, setManualName] = useState('');
+  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
   const [busy, setBusy] = useState(null); // label do arquivo em processamento
   const [apiError, setApiError] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -167,9 +169,10 @@ export default function Home() {
     }
     if (merged.length === 0) return '';
     if (format === 'prisma') return formatPrisma(merged);
-    if (format === 'tubulo') return formatTubulopatias(merged);
+    if (format === 'tubulo')
+      return formatTubulopatias(merged, { weight, height });
     return format === 'rotina' ? formatRotina(merged) : formatMensalao(merged);
-  }, [activeName, nameConflict, merged, mergedImaging, format]);
+  }, [activeName, nameConflict, merged, mergedImaging, format, weight, height]);
 
   const warnings = useMemo(() => {
     const all = [];
@@ -184,6 +187,9 @@ export default function Home() {
   function invalidateConfirmation() {
     setConfirmedName(null);
     setCopied(false);
+    // peso/altura são do paciente — nunca podem sobrar para o próximo laudo
+    setWeight('');
+    setHeight('');
   }
 
   function addTextSource(label, kind, text) {
@@ -486,6 +492,39 @@ export default function Home() {
             </button>
             {copied && <span className="copied">copiado ✓</span>}
           </div>
+
+          {format === 'tubulo' && confirmedName && !nameConflict ? (
+            <div className="row measures">
+              <label>
+                Peso{' '}
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.1"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  placeholder="kg"
+                />
+              </label>
+              <label>
+                Altura{' '}
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.5"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  placeholder="cm (opcional)"
+                />
+              </label>
+              <span className="muted">
+                Peso → superfície corpórea (Costeff) e clearance corrigido para
+                1,73 m². Com a altura, usa Mosteller e calcula o eGFR Schwartz.
+              </span>
+            </div>
+          ) : null}
 
           {!confirmedName && !nameConflict ? (
             <p className="muted">

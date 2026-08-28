@@ -335,3 +335,29 @@ pre.output {
 .privacy b {
   color: var(--warn-ink);
 }
+
+/* peso/altura (modalidade TUBULOPATIAS) */
+.row.measures {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: #eef6fc;
+  border: 1px solid var(--blue-line);
+  border-radius: 5px;
+}
+.row.measures label {
+  font-size: 13px;
+  color: var(--muted);
+}
+.row.measures input {
+  width: 110px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 13.5px;
+  margin-left: 4px;
+}
+.row.measures .muted {
+  flex: 1;
+  min-width: 240px;
+  font-size: 12px;
+}
