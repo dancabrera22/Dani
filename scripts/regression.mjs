@@ -63,6 +63,20 @@ IgE total 45 UI/mL 0 100`
 );
 
 run(
+  'URINA DE 24 HORAS',
+  `Paciente: TESTE VINTEQUATRO
+Coletado em: 27/08/2026 às 07:00
+Creatinina: 0,80 mg/dL 0,5 1
+PROTEINÚRIA DE 24 HORAS
+Volume urinário: 1200 mL
+Proteínas Urinárias 29,2 mg/dL
+CREATININA (URINA 24 HORAS)
+85 mg/dL
+CALCIO (URINA 24 HORAS)
+8,3 mg/dL`
+);
+
+run(
   'SOROLOGIAS + URINA + PRISMA',
   `Paciente: TESTE REGRESSAO
 Coletado em: 18/08/2026 às 08:00

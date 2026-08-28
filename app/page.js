@@ -300,7 +300,7 @@ export default function Home() {
           <p>
             Texto e PDFs são processados <b>100% no seu computador</b> —
             nada sai daqui. Apenas fotos e PDFs escaneados (se você aceitar)
-            usam o servidor externo da Anthropic.
+            são enviados a um servidor externo para leitura.
           </p>
         </div>
       </header>
