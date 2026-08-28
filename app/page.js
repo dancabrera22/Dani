@@ -9,6 +9,7 @@ import {
   formatTubulopatias,
   patientDerived,
 } from '../lib/format.js';
+import { FORMULA_GROUPS, formulaStatus } from '../lib/formulas.js';
 import {
   parseImagingConclusions,
   formatImaging,
@@ -189,6 +190,25 @@ export default function Home() {
     () => patientDerived(merged, { weight, height }),
     [merged, weight, height]
   );
+
+  const availableIds = useMemo(() => new Set(merged.map((r) => r.id)), [merged]);
+
+  const extrasOn = useMemo(() => {
+    const urDays = new Map();
+    for (const r of merged) {
+      if (r.id !== 'Ur' || !r.dt) continue;
+      urDays.set(r.dt.dayKey, (urDays.get(r.dt.dayKey) || 0) + 1);
+    }
+    return {
+      peso: Number(weight) > 0,
+      altura: Number(height) > 0,
+      hdTime: Number(hdTime) > 0,
+      hdPre: Number(hdPre) > 0,
+      hdPos: Number(hdPos) > 0,
+      prePos: [...urDays.values()].some((n) => n > 1),
+      h24: merged.some((r) => r.h24) || availableIds.has('U-VolQ'),
+    };
+  }, [merged, availableIds, weight, height, hdTime, hdPre, hdPos]);
 
   const warnings = useMemo(() => {
     const all = [];
@@ -620,6 +640,48 @@ export default function Home() {
           )}
         </section>
       )}
+
+      {/* 4. FÓRMULAS (consulta) */}
+      <section className="card">
+        <details className="formulas">
+          <summary>
+            Fórmulas usadas pelo transcritor
+            {sources.length > 0 ? ' — e o que falta para cada uma' : ''}
+          </summary>
+          {FORMULA_GROUPS.map((g) => (
+            <div key={g.grupo} className="fgroup">
+              <h3>{g.grupo}</h3>
+              <ul>
+                {g.itens.map((it) => {
+                  const st =
+                    sources.length > 0
+                      ? formulaStatus(it, availableIds, extrasOn)
+                      : null;
+                  return (
+                    <li key={it.nome}>
+                      <b>{it.nome}</b> <code>{it.formula}</code>
+                      <span className="fonde">{it.onde}</span>
+                      {st ? (
+                        st.ok ? (
+                          <span className="fok">✓ disponível</span>
+                        ) : (
+                          <span className="ffalta">
+                            falta {st.faltando.join(', ')}
+                          </span>
+                        )
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+          <p className="muted">
+            Cada cálculo só aparece na transcrição quando todos os componentes
+            existem na mesma coleta. A conferência final é sempre sua.
+          </p>
+        </details>
+      </section>
     </div>
   );
 }

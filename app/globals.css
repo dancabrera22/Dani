@@ -372,3 +372,57 @@ pre.output {
   font-weight: 600;
   flex: 0 0 auto;
 }
+
+/* seção de consulta às fórmulas */
+details.formulas summary {
+  cursor: pointer;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--lav-ink);
+  background: var(--lav);
+  border-left: 4px solid var(--lav-ink);
+  border-radius: 3px;
+  padding: 6px 10px;
+}
+details.formulas .fgroup h3 {
+  font-size: 13px;
+  color: var(--teal-dark);
+  margin: 16px 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+details.formulas ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  overflow: hidden;
+}
+details.formulas li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  padding: 7px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--line);
+}
+details.formulas li:last-child { border-bottom: none; }
+details.formulas li:nth-child(even) { background: #eef6fc; }
+details.formulas code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  flex: 1;
+  min-width: 220px;
+}
+details.formulas .fonde {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+details.formulas .fok { color: var(--green); font-weight: 700; font-size: 12px; }
+details.formulas .ffalta { color: var(--warn-ink); font-size: 12px; }
