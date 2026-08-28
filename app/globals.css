@@ -62,14 +62,11 @@ header.app {
   gap: 18px;
 }
 header.app .logo {
-  height: 56px;
+  height: 60px;
   width: auto;
   flex-shrink: 0;
-  background: #fff;
-  padding: 5px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--line);
-  box-sizing: content-box;
+  /* funde o fundo branco do JPEG com o degradê do cabeçalho */
+  mix-blend-mode: multiply;
 }
 header.app h1 {
   font-size: 21px;

@@ -298,9 +298,9 @@ export default function Home() {
         <div>
           <h1>Transcritor de Exames</h1>
           <p>
-            Laudos → ROTINA / MENSALÃO / IMAGEM. Texto e PDFs com texto são
-            processados <b>100% localmente</b>; imagens e PDFs escaneados usam
-            a API da Anthropic (opcional).
+            Laudos → ROTINA / MENSALÃO / PRISMA / TUBULOPATIAS / IMAGEM.
+            Texto e PDFs com texto são processados <b>100% localmente</b>;
+            imagens e PDFs escaneados usam a API da Anthropic (opcional).
           </p>
         </div>
       </header>
