@@ -133,7 +133,8 @@ export default function Home() {
   const [height, setHeight] = useState('');
   const [measuresFor, setMeasuresFor] = useState(null);
   const [hdTime, setHdTime] = useState('');
-  const [hdUF, setHdUF] = useState('');
+  const [hdPre, setHdPre] = useState('');
+  const [hdPos, setHdPos] = useState('');
   const [hdSessions, setHdSessions] = useState('');
   const [busy, setBusy] = useState(null); // label do arquivo em processamento
   const [apiError, setApiError] = useState(null);
@@ -178,10 +179,10 @@ export default function Home() {
       return formatTubulopatias(merged, { weight, height });
     return format === 'rotina'
       ? formatRotina(merged, { weight, height })
-      : formatMensalao(merged, { weight, height, hdTime, hdUF, hdSessions });
+      : formatMensalao(merged, { weight, height, hdTime, hdPre, hdPos, hdSessions });
   }, [
     activeName, nameConflict, merged, mergedImaging, format,
-    weight, height, hdTime, hdUF, hdSessions,
+    weight, height, hdTime, hdPre, hdPos, hdSessions,
   ]);
 
   const derived = useMemo(
@@ -212,7 +213,8 @@ export default function Home() {
       setWeight('');
       setHeight('');
       setHdTime('');
-      setHdUF('');
+      setHdPre('');
+      setHdPos('');
       setHdSessions('');
     }
     setMeasuresFor(key);
@@ -522,18 +524,23 @@ export default function Home() {
                   onChange={(e) => setHdTime(e.target.value)} placeholder="min" />
               </label>
               <label>
-                UF{' '}
-                <input type="number" min="0" step="50" value={hdUF}
-                  onChange={(e) => setHdUF(e.target.value)} placeholder="mL" />
-              </label>
-              <label>
                 Sessões{' '}
                 <input type="number" min="1" max="7" step="1" value={hdSessions}
                   onChange={(e) => setHdSessions(e.target.value)} placeholder="3/sem" />
               </label>
+              <label>
+                Peso pré{' '}
+                <input type="number" min="0" step="0.1" value={hdPre}
+                  onChange={(e) => setHdPre(e.target.value)} placeholder="kg" />
+              </label>
+              <label>
+                Peso pós{' '}
+                <input type="number" min="0" step="0.1" value={hdPos}
+                  onChange={(e) => setHdPos(e.target.value)} placeholder="kg" />
+              </label>
               <span className="muted">
-                Com ureia pré e pós no mesmo dia + peso: Kt/V da sessão e
-                stdKt/V semanal (MENSALÃO).
+                Com ureia pré e pós do mesmo dia: Kt/V da sessão e stdKt/V
+                semanal no MENSALÃO (UF = peso pré − pós).
               </span>
             </div>
           )}
