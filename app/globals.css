@@ -426,3 +426,20 @@ details.formulas .fonde {
 }
 details.formulas .fok { color: var(--green); font-weight: 700; font-size: 12px; }
 details.formulas .ffalta { color: var(--warn-ink); font-size: 12px; }
+
+/* calculadora de soros */
+ul.sources select {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 13.5px;
+  background: var(--card);
+  min-width: 200px;
+}
+ul.sources input[type='number'] {
+  width: 90px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 13.5px;
+}
