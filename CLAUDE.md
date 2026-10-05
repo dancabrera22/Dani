@@ -13,7 +13,13 @@ npm run build                            # valida compilação
 node scripts/regression.mjs              # regressão sintética (SAMPLE da UI + sorologia/urina/prisma)
 node scripts/extract-pdf.mjs x.pdf --out /tmp/dir   # PDF -> txt (mesma reconstrução do app)
 node scripts/trace.mjs /tmp/dir/x.txt [--only Cr,CaI] [--quiet]  # origem de cada valor + 3 modelos
+node scripts/audit-captures.mjs /tmp/dir   # auditoria: faixa, referência, órfão, unidade, repetição
+node scripts/make-icon.mjs                 # regenera o favicon (T do transcritor)
 ```
+
+**Rodar a auditoria é obrigatório ao acrescentar um laboratório novo** — foi
+ela que separou falso positivo de erro real nos casos da bilirrubina (valor
+vindo de referência neonatal) e da creatinina urinária lida como sérica.
 Laudos reais só em diretórios temporários — nunca no repositório.
 
 Teste rápido do parser (sem browser): crie um `.mjs` que importe
