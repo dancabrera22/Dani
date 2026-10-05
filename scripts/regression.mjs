@@ -56,7 +56,8 @@ FOSFORO (URINA ISOLADA)
 33 mg/dL 0 0
 OSMOLALIDADE URINARIA
 500 mOsm/kg 50 1200
-Osmolalidade: 290 mOsm/kg 275 295
+OSMOLALIDADE, SORO
+290 mOsm/kg 275 295
 Imunoglobulina G 850 mg/dL 700 1600
 Imunoglobulina A 120 mg/dL 70 400
 IgE total 45 UI/mL 0 100`
