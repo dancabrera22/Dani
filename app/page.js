@@ -87,7 +87,6 @@ Magnésio ............. 2,1 mg/dL
 Cloro ................ 104 mEq/L
 Cálcio total ......... 9,1 mg/dL
 Fósforo .............. 4,2 mg/dL
-Cálcio iônico ........ 4,9 mg/dL
 Glicose .............. 92 mg/dL
 Proteínas totais ..... 6,8 g/dL
 Albumina ............. 3,9 g/dL
@@ -109,6 +108,7 @@ HCO3 ................. 21,8 mEq/L
 BE ................... -3,1
 Saturação de O2 ...... 68,0 %
 Lactato .............. 1,4 mmol/L
+Cálcio iônico ........ 4,9 mg/dL
 
 LABORATORIO EXEMPLO - SETOR DE DIAGNÓSTICO POR IMAGEM
 Paciente: PACIENTE EXEMPLO DA SILVA
