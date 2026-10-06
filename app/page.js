@@ -94,6 +94,11 @@ Albumina ............. 3,9 g/dL
 TGO (AST) ............ 28 U/L
 TGP (ALT) ............ 31 U/L
 Proteína C Reativa ... 0,4 mg/dL
+Tacrolimo (FK-506) ... 6,8 ng/mL
+
+URINA - Material: Urina, amostra isolada
+Relação proteína/creatinina ............ 0,42 mg/mg
+Relação microalbuminúria/creatininúria .. 18,0 mg/g
 
 Coletado em: 10/08/2026 às 16:40
 GASOMETRIA VENOSA - Material: Sangue venoso
