@@ -47,11 +47,20 @@ export default function Soros() {
     );
     l.push(`Oferta hídrica ${fmt(r.ofertaHidrica)} mL/kg/dia`);
     l.push(`Glicose ${fmt(r.glicosePct)}% · VIG ${fmt(r.vig)} mg/kg/min`);
-    const ions = ['Na', 'K', 'Cl', 'Ca', 'Mg', 'HCO3']
+    // Na e K: concentração da solução vem primeiro (tonicidade)
+    for (const k of ['Na', 'K']) {
+      if (r.ions[k] > 0) {
+        l.push(
+          `${k} ${fmt(r.porLitro[k])} mEq/L (${fmt(r.porKg[k])} mEq/kg/dia · ` +
+            `${fmt(r.por100kcal[k])} mEq/100 kcal)`
+        );
+      }
+    }
+    const outros = ['Cl', 'Ca', 'Mg', 'HCO3']
       .filter((k) => r.ions[k] > 0)
       .map((k) => `${k} ${fmt(r.porKg[k])}`)
       .join(' ');
-    if (ions) l.push(`mEq/kg/dia: ${ions}`);
+    if (outros) l.push(`mEq/kg/dia: ${outros}`);
     if (r.ions.P > 0) l.push(`P ${fmt(r.porKg.P)} mmol/kg/dia`);
     l.push(`Osmolaridade ${fmt(r.osmolaridade)} mOsm/L (${r.acessoSugerido})`);
     return l.join('\n');
