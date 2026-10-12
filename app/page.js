@@ -381,7 +381,7 @@ export default function Home() {
             ) : (
               <>
                 Tudo é processado <b>100% no seu computador</b>. Nada sai
-                daqui — esta versão não tem para onde enviar.
+                daqui.
               </>
             )}
           </p>
@@ -425,9 +425,8 @@ export default function Home() {
             </>
           ) : (
             <>
-              <b>Privacidade:</b> o laudo não sai do seu navegador. Esta
-              versão não envia nada para servidor nenhum, nem com
-              autorização — a leitura de imagem foi deixada de fora.
+              <b>Privacidade:</b> o laudo é lido dentro do seu navegador e
+              fica só nele. Nada sai daqui.
             </>
           )}
         </p>
