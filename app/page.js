@@ -347,14 +347,10 @@ export default function Home() {
   return (
     <div className="wrap">
       <header className="app">
-        <img
-          src="/logo-icr.jpg"
-          alt="Instituto da Criança"
-          className="logo"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-          }}
-        />
+        {/* Sem logo institucional, por escolha da Dra. Danielle (11/10/2026):
+            o site não precisa parecer do ICr. O arquivo continua em
+            public/logo-icr.jpg — para voltar atrás basta restaurar a <img>
+            com className="logo", que o estilo dela segue no globals.css. */}
         <div>
           <h1>Transcritor de Exames</h1>
           <p>

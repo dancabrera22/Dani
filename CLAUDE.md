@@ -120,6 +120,14 @@ Ureia pré/pós-diálise **no mesmo horário**: dedup mantém só o primeiro val
 (horários distintos funcionam). Se for corrigir, o dedup está em
 `parseReport`/`mergeResults` (chave `id|sortKey`).
 
+## Logo do cabeçalho
+
+Sai **sem logo** desde 11/10/2026 — só o título. A Dra. Danielle pediu algo
+neutro, que não pareça institucional. O arquivo `public/logo-icr.jpg` e a
+regra `header.app .logo` no CSS continuam no lugar: para voltar ao logo do
+ICr basta repor a `<img src="/logo-icr.jpg" className="logo">` como primeiro
+filho do `<header className="app">`.
+
 ## Publicação
 
 - **GitHub**: https://github.com/dancabrera22/Dani (branch `main`).
