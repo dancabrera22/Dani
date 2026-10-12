@@ -125,6 +125,9 @@ Ausência de líquido livre na cavidade.
 
 Dr. Radiologista Exemplo - CRM 00000`;
 
+// Mesma checagem usada dentro e fora do componente.
+const temOCRGlobal = () => Boolean(process.env.NEXT_PUBLIC_OCR);
+
 // ---------- componente ----------
 
 let nextId = 1;
@@ -312,6 +315,12 @@ export default function Home() {
         if (text.replace(/\s/g, '').length > 60) {
           // PDF com camada de texto: processamento 100% local
           addTextSource(label, 'pdf', text);
+        } else if (!temOCRGlobal()) {
+          setApiError(
+            `"${label}" parece ser um PDF escaneado, sem camada de texto. ` +
+              'Esta versão lê apenas texto e PDFs pesquisáveis — nada é ' +
+              'enviado para fora. Use a versão local para imagens.'
+          );
         } else {
           // PDF escaneado (imagem): precisa da API
           const ok = window.confirm(
@@ -320,6 +329,11 @@ export default function Home() {
           );
           if (ok) await sendToApi(label, 'application/pdf', fileToBase64(buf));
         }
+      } else if (file.type.startsWith('image/') && !temOCRGlobal()) {
+        setApiError(
+          `"${label}" é uma imagem. Esta versão lê apenas texto e PDFs ` +
+            'pesquisáveis — nada é enviado para fora. Use a versão local.'
+        );
       } else if (file.type.startsWith('image/')) {
         const ok = window.confirm(
           `Imagens só podem ser transcritas via API da Anthropic (dados saem do computador).\n\nEnviar "${label}"?`
@@ -344,6 +358,10 @@ export default function Home() {
 
   // ---- render ----
 
+  // OCR de imagem só existe onde há chave de API (uso local). No site
+  // público esta constante é '' e nada relacionado a envio é renderizado.
+  const temOCR = Boolean(process.env.NEXT_PUBLIC_OCR);
+
   return (
     <div className="wrap">
       <header className="app">
@@ -354,9 +372,18 @@ export default function Home() {
         <div>
           <h1>Transcritor de Exames</h1>
           <p>
-            Texto e PDFs são processados <b>100% no seu computador</b> —
-            nada sai daqui. Apenas fotos e PDFs escaneados (se você aceitar)
-            são enviados a um servidor externo para leitura.
+            {temOCR ? (
+              <>
+                Texto e PDFs são processados <b>100% no seu computador</b> —
+                nada sai daqui. Apenas fotos e PDFs escaneados (se você
+                aceitar) são enviados a um servidor externo para leitura.
+              </>
+            ) : (
+              <>
+                Tudo é processado <b>100% no seu computador</b>. Nada sai
+                daqui — esta versão não tem para onde enviar.
+              </>
+            )}
           </p>
         </div>
       </header>
@@ -375,12 +402,12 @@ export default function Home() {
             Adicionar texto
           </button>
           <label className="filelabel">
-            + PDF ou imagem
+            {temOCR ? '+ PDF ou imagem' : '+ PDF ou texto'}
             <input
               ref={fileRef}
               type="file"
               multiple
-              accept=".pdf,.txt,image/*"
+              accept={temOCR ? '.pdf,.txt,image/*' : '.pdf,.txt'}
               onChange={(e) => handleFiles(e.target.files)}
             />
           </label>
@@ -390,9 +417,19 @@ export default function Home() {
           {busy && <span className="muted">Processando {busy}…</span>}
         </div>
         <p className="privacy">
-          <b>Privacidade:</b> nada é enviado para fora do computador sem sua
-          confirmação explícita (apenas imagens/PDFs escaneados, se você
-          aceitar).
+          {temOCR ? (
+            <>
+              <b>Privacidade:</b> nada é enviado para fora do computador sem
+              sua confirmação explícita (apenas imagens/PDFs escaneados, se
+              você aceitar).
+            </>
+          ) : (
+            <>
+              <b>Privacidade:</b> o laudo não sai do seu navegador. Esta
+              versão não envia nada para servidor nenhum, nem com
+              autorização — a leitura de imagem foi deixada de fora.
+            </>
+          )}
         </p>
 
         {apiError && <div className="banner error" style={{ marginTop: 12 }}>{apiError}</div>}
