@@ -140,6 +140,10 @@ export default function Home() {
   const [manualName, setManualName] = useState('');
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
+  // Tempo real da coleta de urina. O laboratório imprime tudo como "/24h"
+  // porque só multiplica concentração por volume — numa coleta de 12 h os
+  // totais dele saem pela metade e o clearance, pelo dobro.
+  const [coletaHoras, setColetaHoras] = useState('24');
   const [measuresFor, setMeasuresFor] = useState(null);
   const [hdTime, setHdTime] = useState('');
   const [hdPre, setHdPre] = useState('');
@@ -183,15 +187,15 @@ export default function Home() {
       return mergedImaging.length > 0 ? formatImaging(mergedImaging) : '';
     }
     if (merged.length === 0) return '';
-    if (format === 'prisma') return formatPrisma(merged, { weight, height });
+    if (format === 'prisma') return formatPrisma(merged, { weight, height, coletaHoras });
     if (format === 'tubulo')
-      return formatTubulopatias(merged, { weight, height });
+      return formatTubulopatias(merged, { weight, height, coletaHoras });
     return format === 'rotina'
-      ? formatRotina(merged, { weight, height })
-      : formatMensalao(merged, { weight, height, hdTime, hdPre, hdPos, hdSessions });
+      ? formatRotina(merged, { weight, height, coletaHoras })
+      : formatMensalao(merged, { weight, height, coletaHoras, hdTime, hdPre, hdPos, hdSessions });
   }, [
     activeName, nameConflict, merged, mergedImaging, format,
-    weight, height, hdTime, hdPre, hdPos, hdSessions,
+    weight, height, coletaHoras, hdTime, hdPre, hdPos, hdSessions,
   ]);
 
   const derived = useMemo(
@@ -548,6 +552,18 @@ export default function Home() {
                   onChange={(e) => setHeight(e.target.value)}
                   placeholder="cm"
                 />
+              </label>
+              <label>
+                Urina coletada em{' '}
+                <select
+                  value={coletaHoras}
+                  onChange={(e) => setColetaHoras(e.target.value)}
+                >
+                  <option value="24">24 h</option>
+                  <option value="12">12 h</option>
+                  <option value="6">6 h</option>
+                  <option value="8">8 h</option>
+                </select>
               </label>
               <span className="muted">
                 {derived.egfr || derived.bsa ? (
