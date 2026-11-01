@@ -310,20 +310,32 @@ export default function Home() {
       if (file.type === 'application/pdf') {
         setBusy(label);
         let text = '';
+        let falha = null;
         try {
           text = await extractPdfText(buf.slice(0));
-        } catch {
-          /* PDF corrompido ou protegido — tenta via API abaixo */
+        } catch (err) {
+          // Não confundir "não consegui abrir" com "escaneado": a mensagem de
+          // PDF escaneado escondia erro de leitura e deixava o problema mudo.
+          falha = err?.message || String(err);
         }
         setBusy(null);
-        if (text.replace(/\s/g, '').length > 60) {
+        const uteis = text.replace(/\s/g, '').length;
+        if (uteis > 60) {
           // PDF com camada de texto: processamento 100% local
           addTextSource(label, 'pdf', text);
+        } else if (falha) {
+          setApiError(
+            `"${label}": não foi possível abrir o PDF (${falha}). ` +
+              'Se ele abre normalmente no visualizador, me avise — pode ser ' +
+              'um formato que o leitor ainda não cobre.'
+          );
         } else if (!temOCRGlobal()) {
           setApiError(
-            `"${label}" parece ser um PDF escaneado, sem camada de texto. ` +
-              'Esta versão lê apenas texto e PDFs pesquisáveis — nada é ' +
-              'enviado para fora. Use a versão local para imagens.'
+            `"${label}" não tem camada de texto (${uteis} caracteres legíveis) — ` +
+              'é um PDF escaneado, feito de imagens. Esta versão lê apenas ' +
+              'texto e PDFs pesquisáveis, e nada sai do computador. ' +
+              'Para esse arquivo, copie o texto do laudo e cole na caixa, ' +
+              'ou use a versão local, que faz OCR.'
           );
         } else {
           // PDF escaneado (imagem): precisa da API
